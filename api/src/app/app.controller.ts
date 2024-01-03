@@ -1,7 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { AppResponseDto } from './app.dto';
+import { AppLoginDto, AppResponseDto } from './app.dto';
 
 @Controller()
 export class AppController {
@@ -15,5 +15,14 @@ export class AppController {
   @ApiOkResponse({ description: 'Returns Hello World!', type: AppResponseDto })
   getHello(): AppResponseDto {
     return this.appService.getHello();
+  }
+
+  @Post('/login')
+  @ApiOperation({
+    operationId: 'example login api',
+    description: 'login api',
+  })
+  login(@Body() body: AppLoginDto) {
+    return this.appService.login(body);
   }
 }

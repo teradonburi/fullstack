@@ -7,7 +7,7 @@ base framework
 
 bridge api
 
-- RTKQuery
+- openapi-generator-cli typescript-axios
 - Open API
 
 management logic as data

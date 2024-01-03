@@ -20,6 +20,29 @@
           }
         }
       }
+    },
+    "/api/login": {
+      "post": {
+        "operationId": "example login api",
+        "summary": "",
+        "description": "login api",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
@@ -50,6 +73,25 @@
         },
         "required": [
           "message"
+        ]
+      },
+      "AppLoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "email",
+            "example": "text@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "password",
+            "example": "TODO: password hash at server side"
+          }
+        },
+        "required": [
+          "email",
+          "password"
         ]
       }
     }
