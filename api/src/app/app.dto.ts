@@ -10,21 +10,3 @@ export class AppResponseDto {
   })
   message: string;
 }
-
-export class AppLoginDto {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    description: 'email',
-    example: 'text@example.com',
-  })
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    description: 'password',
-    example: 'TODO: password hash at server side',
-  })
-  password: string;
-}

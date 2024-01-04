@@ -1,4 +1,4 @@
-import { $, type QRL, component$, useOnWindow, useSignal, useStyles$ } from "@builder.io/qwik";
+import { $, type QRL, component$, useOnWindow, useSignal, useStyles$, useResource$, Resource } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import styles from './styles.css?inline';
@@ -9,6 +9,10 @@ import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
 import { formAction$, useForm, valiForm$ } from '@modular-forms/qwik';
 import { email, type Input, minLength, object, string } from 'valibot';
  
+const api = new DefaultApi(new Configuration({
+  basePath: 'http://localhost:3000',
+}))
+
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
   // https://qwik.builder.io/docs/caching/
@@ -58,9 +62,6 @@ export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
 }));
  
 export const useFormAction = formAction$<LoginForm>(async (values) => {
-  const api = new DefaultApi(new Configuration({
-    basePath: 'http://localhost:3000',
-  }))
   await api.exampleLoginApi(values)
 }, valiForm$(LoginSchema));
 
@@ -82,31 +83,44 @@ export default component$(() => {
     console.log(values);
   });
 
+  const user = useResource$<{email: string}>(async ({ track }) => {
+    // it will run first on mount (server), then re-run whenever prNumber changes (client)
+    // this means this code will run on the server and the browser
+    track(() => user.value);
+    // const {data} = await api.exampleApi()
+    return { email: 'test@example.com' }
+  });
+
   return (
     <main 
       style={{height: '100vh'}}
     >
       <div style={{display: 'flex', background: 'grey', width: '100vw', height: '100vh', contain: 'strict'}}>
         <div style={{margin: 'auto', width: 'fit-content'}}>
-        <Form onSubmit$={handleSubmit}>
-          <Field name="email">
-            {(field, props) => (
-              <div>
-                <input {...props} type="email" value={field.value} />
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="password">
-            {(field, props) => (
-              <div>
-                <input {...props} type="password" value={field.value} />
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <button type="submit">Login</button>
-        </Form>
+          <Form onSubmit$={handleSubmit}>
+            <Field name="email">
+              {(field, props) => (
+                <div>
+                  <input {...props} type="email" value={field.value} />
+                  {field.error && <div>{field.error}</div>}
+                </div>
+              )}
+            </Field>
+            <Field name="password">
+              {(field, props) => (
+                <div>
+                  <input {...props} type="password" value={field.value} />
+                  {field.error && <div>{field.error}</div>}
+                </div>
+              )}
+            </Field>
+            <button type="submit">Login</button>
+          </Form>
+          <Resource
+            value={user}
+            onPending={() => <p>Loading...</p>}
+            onResolved={(user) => <div>{user.email}</div>}
+          />
         </div>
       </div>
       {onload && 
