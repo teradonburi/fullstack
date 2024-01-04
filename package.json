@@ -3,13 +3,13 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nx run-many -t api:dev frontend:dev --parallel"
+    "dev": "npx concurrently 'npm:dev:*'",
+    "dev:api": "cd api && bun run start",
+    "dev:frontend": "cd frontend && bun run dev"
   },
   "devDependencies": {
-    "@nx/js": "17.2.8",
     "bun-types": "latest",
-    "nx": "17.2.8",
-    "turbo": "^1.11.2"
+    "concurrently": "^8.2.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
