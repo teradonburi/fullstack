@@ -1,0 +1,23 @@
+{
+  "name": "fullstack",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "nx run-many -t api:dev frontend:dev --parallel"
+  },
+  "devDependencies": {
+    "@nx/js": "17.2.8",
+    "bun-types": "latest",
+    "nx": "17.2.8",
+    "turbo": "^1.11.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "workspaces": {
+    "packages": [
+      "api",
+      "frontend"
+    ]
+  }
+}

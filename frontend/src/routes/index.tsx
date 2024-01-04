@@ -110,28 +110,29 @@ export default component$(() => {
         </div>
       </div>
       {onload && 
-      <InfiniteList
-				loadMore={loadMore.value}
-				onLoadMore$={$(async () => {
-					itemsSig.value = [...itemsSig.value, ...new Array(PER_PAGE).keys()];
-					loadMore.value = itemsSig.value.length < 1000;
-				})}
-			>
-				{itemsSig.value.map((_, key) => (
-					<div 
-            key={key} 
-            style={{
-              contentVisibility: 'auto',
-              containIntrinsicSize: '0 30px',
-            }}
-          >
-            {pageData.value.message}{key}
+        <InfiniteList
+          loadMore={loadMore.value}
+          onLoadMore$={$(async () => {
+            itemsSig.value = [...itemsSig.value, ...new Array(PER_PAGE).keys()];
+            loadMore.value = itemsSig.value.length < 1000;
+          })}
+        >
+          {itemsSig.value.map((_, key) => (
+            <div 
+              key={key} 
+              style={{
+                contentVisibility: 'auto',
+                containIntrinsicSize: '0 30px',
+              }}
+            >
+              {pageData.value.message}{key}
+            </div>
+          ))}
+          <div q:slot='loading' >
+            Loading...
           </div>
-				))}
-				<div q:slot='loading' >
-          Loading...
-				</div>
-			</InfiniteList>}
+        </InfiniteList>
+      }
     </main>
   );
 });
