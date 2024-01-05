@@ -4,6 +4,7 @@ import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
 import { FormError, useForm, valiForm$ } from '@modular-forms/qwik';
 import { email, type Input, minLength, object, string } from 'valibot';
 import { api } from "~/lib/adapter";
+import type { Resolve } from "~/type";
  
 const LoginSchema = object({
   email: string([
@@ -17,25 +18,26 @@ const LoginSchema = object({
 });
  
 type LoginForm = Input<typeof LoginSchema>;
- 
+type ResponseData = Resolve<ReturnType<typeof api.login>>['data'];
+
 export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
   email: 'test@example.com',
   password: '',
 }));
 
 export default component$(() => {
-  const [loginForm, { Form, Field }] = useForm<LoginForm>({
+  const [loginForm, { Form, Field }] = useForm<LoginForm, ResponseData>({
     loader: useFormLoader(),
     validate: valiForm$(LoginSchema),
   });
 
   const handleSubmit: QRL<SubmitHandler<LoginForm>> = $(async (values) => {
     // Runs on client
-    const {data} = await api.exampleLoginApi(values).catch(() => {
+    const {data} = await api.login(values).catch(() => {
       throw new FormError<LoginForm>('login failed');
     })
-    localStorage.setItem('user', JSON.stringify({token: data.token}));
-    location.href = '/';
+    window.localStorage.setItem('user', JSON.stringify({token: data.token}));
+    window.location.href = '/';
   });
 
 

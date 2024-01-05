@@ -1,10 +1,8 @@
-import { $, component$, useOnWindow, useSignal } from "@builder.io/qwik";
+import { $, component$, useOnWindow, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import InfiniteList from '~/components/infinite-list/inifinite-list';
-import type { InitialValues } from '@modular-forms/qwik';
-import { formAction$, valiForm$ } from '@modular-forms/qwik';
-import { email, type Input, minLength, object, string } from 'valibot';
 import { api } from "~/lib/adapter";
+import type { Resolve } from "~/type";
  
 
 export const usePageLoad = routeLoader$(async () => {
@@ -23,27 +21,7 @@ function useInLoad() {
   return onload.value;
 }
 
-const LoginSchema = object({
-  email: string([
-    minLength(1, 'Please enter your email.'),
-    email('The email address is badly formatted.'),
-  ]),
-  password: string([
-    minLength(1, 'Please enter your password.'),
-    minLength(8, 'Your password must have 8 characters or more.'),
-  ]),
-});
- 
-type LoginForm = Input<typeof LoginSchema>;
- 
-export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
-  email: 'test@example.com',
-  password: '',
-}));
- 
-export const useFormAction = formAction$<LoginForm>(async (values) => {
-  await api.exampleLoginApi(values)
-}, valiForm$(LoginSchema));
+type User = Resolve<ReturnType<typeof api.loadUser>>['data'];
 
 export default component$(() => {
   const onload = useInLoad()
@@ -51,16 +29,39 @@ export default component$(() => {
   const loadMore = useSignal(true);
 	const itemsSig = useSignal([...new Array(PER_PAGE).keys()]);
   const pageData = usePageLoad(); 
+  const user = useSignal<User>();
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    const userString = window.localStorage.getItem('user');
+    const userObj = userString ? JSON.parse(userString) : null;
+    if (!userObj) return;
+    const {data} = await api.loadUser({headers: {Authorization: `Bearer ${userObj?.token}`}})
+    user.value = data;
+  })
+
+
+  const logout = $(() => {
+    window.localStorage.removeItem('user');
+    return false;
+  })
 
   return (
     <main 
       style={{height: '100vh'}}
     >
       <div style={{display: 'flex', background: 'grey', width: '100vw', height: '100vh', contain: 'strict'}}>
-        <div style={{margin: 'auto', width: 'fit-content'}}>
-          <a href="/login" style={{display: 'block'}}>Login</a>
-          <a href="/signup" style={{display: 'block'}}>Signup</a>
-        </div>
+        {user.value ?               
+          <div style={{margin: 'auto', width: 'fit-content'}}>
+            {user.value.name}
+            <a onClick$={logout} href='' style={{display: 'block'}}>Logout</a>
+          </div>
+        :
+          <div style={{margin: 'auto', width: 'fit-content'}}>
+            <a href="/login" style={{display: 'block'}}>Login</a>
+            <a href="/signup" style={{display: 'block'}}>Signup</a>
+          </div> 
+        }
       </div>
       {onload && 
         <InfiniteList

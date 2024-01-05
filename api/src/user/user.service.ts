@@ -16,10 +16,6 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async show(token: string) {
-    return await this.userRepository.findByToken(token);
-  }
-
   async signup(param: UserSignupDto) {
     if (await this.userRepository.findByEmail(param.email)) {
       throw new ConflictException('email already exists');

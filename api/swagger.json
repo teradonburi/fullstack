@@ -23,20 +23,29 @@
     },
     "/api/users": {
       "get": {
-        "operationId": "UserController_show",
+        "operationId": "loadUser",
+        "summary": "",
+        "description": "load user",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Returns user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/users/signup": {
       "post": {
-        "operationId": "example signup api",
+        "operationId": "signup",
         "summary": "",
-        "description": "signup api",
+        "description": "signup user",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -74,9 +83,9 @@
     },
     "/api/users/login": {
       "post": {
-        "operationId": "example login api",
+        "operationId": "login",
         "summary": "",
-        "description": "login api",
+        "description": "login user",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -153,6 +162,25 @@
           "message"
         ]
       },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name",
+            "example": "test name"
+          },
+          "token": {
+            "type": "string",
+            "description": "token",
+            "example": "auth token"
+          }
+        },
+        "required": [
+          "name",
+          "token"
+        ]
+      },
       "UserSignupDto": {
         "type": "object",
         "properties": {
@@ -176,25 +204,6 @@
           "name",
           "email",
           "password"
-        ]
-      },
-      "UserResponseDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "name",
-            "example": "test name"
-          },
-          "token": {
-            "type": "string",
-            "description": "token",
-            "example": "auth token"
-          }
-        },
-        "required": [
-          "name",
-          "token"
         ]
       },
       "Error": {

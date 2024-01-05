@@ -25,25 +25,32 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthGuard('bearer'))
-  async show(@Request() req) {
-    return await this.userService.show(req.user);
+  @ApiOperation({
+    operationId: 'loadUser',
+    description: 'load user',
+  })
+  @ApiOkResponse({ description: 'Returns user', type: UserResponseDto })
+  async show(@Request() req): Promise<UserResponseDto> {
+    return req.user;
   }
 
   @Post('/signup')
   @ApiOperation({
-    operationId: 'example signup api',
-    description: 'signup api',
+    operationId: 'signup',
+    description: 'signup user',
   })
   @ApiOkResponse({ description: 'Returns user', type: UserResponseDto })
   @ApiConflictResponse({ description: 'email already exists', type: ErrorDTO })
-  async signup(@Body(new ValidationPipe()) body: UserSignupDto) {
+  async signup(
+    @Body(new ValidationPipe()) body: UserSignupDto,
+  ): Promise<UserResponseDto> {
     return await this.userService.signup(body);
   }
 
   @Post('/login')
   @ApiOperation({
-    operationId: 'example login api',
-    description: 'login api',
+    operationId: 'login',
+    description: 'login user',
   })
   @ApiOkResponse({ description: 'Returns user', type: UserResponseDto })
   @ApiNotFoundResponse({
@@ -54,7 +61,9 @@ export class UserController {
     description: 'email and password pair is wrong',
     type: ErrorDTO,
   })
-  async login(@Body(new ValidationPipe()) body: UserLoginDto) {
+  async login(
+    @Body(new ValidationPipe()) body: UserLoginDto,
+  ): Promise<UserResponseDto> {
     return await this.userService.login(body);
   }
 }

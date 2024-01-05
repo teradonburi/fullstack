@@ -21,7 +21,7 @@ const SignupSchema = object({
 });
  
 type SignupForm = Input<typeof SignupSchema>;
-type ResponseData = Resolve<ReturnType<typeof api.exampleSignupApi>>['data'];
+type ResponseData = Resolve<ReturnType<typeof api.signup>>['data'];
  
 export const useFormLoader = routeLoader$<InitialValues<SignupForm>>(() => ({
   name: 'test',
@@ -37,7 +37,7 @@ export default component$(() => {
 
   const handleSubmit: QRL<SubmitHandler<SignupForm>> = $(async (values) => {
     // Runs on client      
-    const {data} = await api.exampleSignupApi(values)
+    const {data} = await api.signup(values)
       .catch((error) => {
         if (error.response?.status === 409) {
           throw new FormError<SignupForm>('An error has occurred.', {
@@ -47,8 +47,8 @@ export default component$(() => {
           throw new FormError<SignupForm>(error.response.data.message);
         }
       })
-    localStorage.setItem('user', JSON.stringify({token: data.token}));
-    location.href = '/';
+    window.localStorage.setItem('user', JSON.stringify({token: data.token}));
+    window.location.href = '/';
   });
 
 
