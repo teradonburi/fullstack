@@ -3,6 +3,7 @@ import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import InfiniteList from '~/components/infinite-list/inifinite-list';
 import { useAuth } from "~/hooks/auth";
 import { api } from "~/lib/adapter";
+import { QCounter } from "~/react/counter";
 
 export const usePageLoad = routeLoader$(async () => {
   const {data} = await api.exampleApi()
@@ -51,6 +52,7 @@ export default component$(() => {
             <a href="/signup" style={{display: 'block'}}>Signup</a>
           </div> 
         }
+        <QCounter />
       </div>
       {onload && 
         <InfiniteList
