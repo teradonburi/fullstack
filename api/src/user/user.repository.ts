@@ -36,7 +36,6 @@ class UserRepository {
         token,
         deactivate: { $ne: true },
       })
-      .select('token')
       .exec();
   }
 
@@ -45,7 +44,7 @@ class UserRepository {
   }
 
   async update(id: ObjectId | string, body: Partial<User>) {
-    return await this.userModel.findByIdAndDelete(id, { $set: body }).exec();
+    return await this.userModel.findByIdAndUpdate(id, { $set: body }).exec();
   }
 }
 

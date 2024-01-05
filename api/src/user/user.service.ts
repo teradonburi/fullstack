@@ -10,6 +10,10 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
+  async show(token: string) {
+    return await this.userRepository.findByToken(token);
+  }
+
   async signup(param: UserSignupDto) {
     const user = await this.userRepository.create({
       name: param.name,
@@ -17,7 +21,7 @@ export class UserService {
       token: this.userRepository.generateToken(),
     });
 
-    const newUser = this.userRepository.update(user._id, {
+    const newUser = await this.userRepository.update(user._id, {
       password: this.userRepository.cipher(param.password, getId(user)),
     });
 

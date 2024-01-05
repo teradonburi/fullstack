@@ -21,7 +21,7 @@ async function bootstrap({
   app.enableCors({
     origin: '*',
     allowedHeaders:
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-meetsmore',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   });
 
   if (options?.swagger) {

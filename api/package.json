@@ -18,7 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "gen": "openapi-generator-cli generate -g typescript-axios -i ./swagger.json -o ../frontend/src/typescript-axios"
+    "gen": "openapi-generator-cli generate -g typescript-axios -i ./swagger.json -o ../frontend/src/typescript-axios",
+    "mongo": "node --experimental-repl-await dist/repl.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -30,6 +31,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "config": "^3.3.9",
+    "dayjs": "^1.11.10",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.3",
     "mongoose-aggregate-paginate-v2": "^1.0.7",

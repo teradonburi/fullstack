@@ -26,25 +26,6 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
- * @interface AppLoginDto
- */
-export interface AppLoginDto {
-    /**
-     * email
-     * @type {string}
-     * @memberof AppLoginDto
-     */
-    'email': string;
-    /**
-     * password
-     * @type {string}
-     * @memberof AppLoginDto
-     */
-    'password': string;
-}
-/**
- * 
- * @export
  * @interface AppResponseDto
  */
 export interface AppResponseDto {
@@ -54,6 +35,50 @@ export interface AppResponseDto {
      * @memberof AppResponseDto
      */
     'message': string;
+}
+/**
+ * 
+ * @export
+ * @interface UserLoginDto
+ */
+export interface UserLoginDto {
+    /**
+     * email
+     * @type {string}
+     * @memberof UserLoginDto
+     */
+    'email': string;
+    /**
+     * password
+     * @type {string}
+     * @memberof UserLoginDto
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface UserSignupDto
+ */
+export interface UserSignupDto {
+    /**
+     * name
+     * @type {string}
+     * @memberof UserSignupDto
+     */
+    'name': string;
+    /**
+     * email
+     * @type {string}
+     * @memberof UserSignupDto
+     */
+    'email': string;
+    /**
+     * password
+     * @type {string}
+     * @memberof UserSignupDto
+     */
+    'password': string;
 }
 
 /**
@@ -95,14 +120,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * login api
          * @summary 
-         * @param {AppLoginDto} appLoginDto 
+         * @param {UserLoginDto} userLoginDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        exampleLoginApi: async (appLoginDto: AppLoginDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'appLoginDto' is not null or undefined
-            assertParamExists('exampleLoginApi', 'appLoginDto', appLoginDto)
-            const localVarPath = `/api/login`;
+        exampleLoginApi: async (userLoginDto: UserLoginDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userLoginDto' is not null or undefined
+            assertParamExists('exampleLoginApi', 'userLoginDto', userLoginDto)
+            const localVarPath = `/api/users/login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -121,7 +146,72 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(appLoginDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(userLoginDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * signup api
+         * @summary 
+         * @param {UserSignupDto} userSignupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        exampleSignupApi: async (userSignupDto: UserSignupDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userSignupDto' is not null or undefined
+            assertParamExists('exampleSignupApi', 'userSignupDto', userSignupDto)
+            const localVarPath = `/api/users/signup`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(userSignupDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerShow: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -153,14 +243,38 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * login api
          * @summary 
-         * @param {AppLoginDto} appLoginDto 
+         * @param {UserLoginDto} userLoginDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async exampleLoginApi(appLoginDto: AppLoginDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.exampleLoginApi(appLoginDto, options);
+        async exampleLoginApi(userLoginDto: UserLoginDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.exampleLoginApi(userLoginDto, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DefaultApi.exampleLoginApi']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * signup api
+         * @summary 
+         * @param {UserSignupDto} userSignupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async exampleSignupApi(userSignupDto: UserSignupDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.exampleSignupApi(userSignupDto, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.exampleSignupApi']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userControllerShow(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerShow(options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['DefaultApi.userControllerShow']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
     }
@@ -185,12 +299,30 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * login api
          * @summary 
-         * @param {AppLoginDto} appLoginDto 
+         * @param {UserLoginDto} userLoginDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        exampleLoginApi(appLoginDto: AppLoginDto, options?: any): AxiosPromise<void> {
-            return localVarFp.exampleLoginApi(appLoginDto, options).then((request) => request(axios, basePath));
+        exampleLoginApi(userLoginDto: UserLoginDto, options?: any): AxiosPromise<void> {
+            return localVarFp.exampleLoginApi(userLoginDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * signup api
+         * @summary 
+         * @param {UserSignupDto} userSignupDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        exampleSignupApi(userSignupDto: UserSignupDto, options?: any): AxiosPromise<void> {
+            return localVarFp.exampleSignupApi(userSignupDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userControllerShow(options?: any): AxiosPromise<void> {
+            return localVarFp.userControllerShow(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -216,13 +348,35 @@ export class DefaultApi extends BaseAPI {
     /**
      * login api
      * @summary 
-     * @param {AppLoginDto} appLoginDto 
+     * @param {UserLoginDto} userLoginDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public exampleLoginApi(appLoginDto: AppLoginDto, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).exampleLoginApi(appLoginDto, options).then((request) => request(this.axios, this.basePath));
+    public exampleLoginApi(userLoginDto: UserLoginDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).exampleLoginApi(userLoginDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * signup api
+     * @summary 
+     * @param {UserSignupDto} userSignupDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public exampleSignupApi(userSignupDto: UserSignupDto, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).exampleSignupApi(userSignupDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public userControllerShow(options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).userControllerShow(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

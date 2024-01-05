@@ -21,7 +21,41 @@
         }
       }
     },
-    "/api/login": {
+    "/api/users": {
+      "get": {
+        "operationId": "UserController_show",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/users/signup": {
+      "post": {
+        "operationId": "example signup api",
+        "summary": "",
+        "description": "signup api",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/users/login": {
       "post": {
         "operationId": "example login api",
         "summary": "",
@@ -32,7 +66,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AppLoginDto"
+                "$ref": "#/components/schemas/UserLoginDto"
               }
             }
           }
@@ -75,7 +109,32 @@
           "message"
         ]
       },
-      "AppLoginDto": {
+      "UserSignupDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name",
+            "example": "test name"
+          },
+          "email": {
+            "type": "string",
+            "description": "email",
+            "example": "text@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "password",
+            "example": "TODO: password hash at server side"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "UserLoginDto": {
         "type": "object",
         "properties": {
           "email": {

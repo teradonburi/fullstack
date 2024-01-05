@@ -14,8 +14,6 @@ export class DBConnection {
     @InjectConnection(CONNECTION_NAME)
     private connection: Connection,
   ) {
-    console.log(`marketing pf connect to ${this.connection.db.databaseName}`);
-
     if (DEBUG) {
       mongoose.set('debug', true);
     }

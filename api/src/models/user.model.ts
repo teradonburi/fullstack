@@ -13,13 +13,13 @@ export class User {
   @Prop({ type: String })
   name: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, select: false, unique: true })
   email: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, select: false })
   password: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, select: false })
   token: string;
 }
 

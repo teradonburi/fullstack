@@ -1,11 +1,9 @@
 {
   "mongodb": {
-    "uri": "mongodb://localhost:27017/meetsmore?directConnection=true",
+    "uri": "mongodb://localhost:27017/test?directConnection=true",
     "options": {
       "socketTimeoutMS": 0,
       "connectTimeoutMS": 0,
-      "useNewUrlParser": true,
-      "useUnifiedTopology": true,
       "serverSelectionTimeoutMS": 120000,
       "w": "majority",
       "connectionName": "test",
