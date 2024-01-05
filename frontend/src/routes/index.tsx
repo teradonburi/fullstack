@@ -45,6 +45,7 @@ export default component$(() => {
           <div style={{margin: 'auto', width: 'fit-content'}}>
             {user.name}
             <a onClick$={logout} href='' style={{display: 'block'}}>Logout</a>
+            <QCounter />
           </div>
         :
           <div style={{margin: 'auto', width: 'fit-content'}}>
@@ -52,7 +53,6 @@ export default component$(() => {
             <a href="/signup" style={{display: 'block'}}>Signup</a>
           </div> 
         }
-        <QCounter />
       </div>
       {onload && 
         <InfiniteList
