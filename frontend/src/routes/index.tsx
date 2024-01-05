@@ -1,9 +1,8 @@
-import { $, component$, useOnWindow, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, useOnWindow, useSignal } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import InfiniteList from '~/components/infinite-list/inifinite-list';
+import { useAuth } from "~/hooks/auth";
 import { api } from "~/lib/adapter";
-import type { Resolve } from "~/type";
- 
 
 export const usePageLoad = routeLoader$(async () => {
   const {data} = await api.exampleApi()
@@ -21,7 +20,6 @@ function useInLoad() {
   return onload.value;
 }
 
-type User = Resolve<ReturnType<typeof api.loadUser>>['data'];
 
 export default component$(() => {
   const onload = useInLoad()
@@ -29,16 +27,7 @@ export default component$(() => {
   const loadMore = useSignal(true);
 	const itemsSig = useSignal([...new Array(PER_PAGE).keys()]);
   const pageData = usePageLoad(); 
-  const user = useSignal<User>();
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    const userString = window.localStorage.getItem('user');
-    const userObj = userString ? JSON.parse(userString) : null;
-    if (!userObj) return;
-    const {data} = await api.loadUser({headers: {Authorization: `Bearer ${userObj?.token}`}})
-    user.value = data;
-  })
+  const user = useAuth();
 
 
   const logout = $(() => {
@@ -51,9 +40,9 @@ export default component$(() => {
       style={{height: '100vh'}}
     >
       <div style={{display: 'flex', background: 'grey', width: '100vw', height: '100vh', contain: 'strict'}}>
-        {user.value ?               
+        {user ?               
           <div style={{margin: 'auto', width: 'fit-content'}}>
-            {user.value.name}
+            {user.name}
             <a onClick$={logout} href='' style={{display: 'block'}}>Logout</a>
           </div>
         :
