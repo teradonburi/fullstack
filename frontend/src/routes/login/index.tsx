@@ -1,7 +1,7 @@
 import { $, type QRL, component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
-import { formAction$, useForm, valiForm$ } from '@modular-forms/qwik';
+import { FormError, useForm, valiForm$ } from '@modular-forms/qwik';
 import { email, type Input, minLength, object, string } from 'valibot';
 import { api } from "~/lib/adapter";
  
@@ -22,21 +22,20 @@ export const useFormLoader = routeLoader$<InitialValues<LoginForm>>(() => ({
   email: 'test@example.com',
   password: '',
 }));
- 
-export const useFormAction = formAction$<LoginForm>(async (values) => {
-  await api.exampleLoginApi(values)
-}, valiForm$(LoginSchema));
 
 export default component$(() => {
-  const [, { Form, Field }] = useForm<LoginForm>({
+  const [loginForm, { Form, Field }] = useForm<LoginForm>({
     loader: useFormLoader(),
-    action: useFormAction(),
     validate: valiForm$(LoginSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<LoginForm>> = $((values) => {
+  const handleSubmit: QRL<SubmitHandler<LoginForm>> = $(async (values) => {
     // Runs on client
-    console.log(values);
+    const {data} = await api.exampleLoginApi(values).catch(() => {
+      throw new FormError<LoginForm>('login failed');
+    })
+    localStorage.setItem('user', JSON.stringify({token: data.token}));
+    location.href = '/';
   });
 
 
@@ -50,7 +49,7 @@ export default component$(() => {
           <Field name="email">
             {(field, props) => (
               <div>
-                <input {...props} type="email" value={field.value} />
+                email:<input {...props} type="email" value={field.value} />
                 {field.error && <div>{field.error}</div>}
               </div>
             )}
@@ -58,11 +57,12 @@ export default component$(() => {
           <Field name="password">
             {(field, props) => (
               <div>
-                <input {...props} type="password" value={field.value} />
+                password:<input {...props} type="password" value={field.value} />
                 {field.error && <div>{field.error}</div>}
               </div>
             )}
           </Field>
+          <div>{loginForm.response.message}</div>
           <button type="submit">Login</button>
         </Form>
         </div>

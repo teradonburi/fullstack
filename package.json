@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bunx concurrently 'npm:dev:*'",
-    "dev:api": "cd api && bun run start:dev",
+    "dev:docker": "docker compose up -d",
+    "dev:api": "wait-on tcp:27017 && cd api && bun run start:dev",
     "dev:api-gen": "wait-on tcp:3000 && cd api && bun run gen",
     "dev:frontend": "wait-on tcp:3000 && cd frontend && bun run dev"
   },

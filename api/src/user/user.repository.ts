@@ -31,16 +31,14 @@ class UserRepository {
   }
 
   async findByEmail(email: string) {
-    return await this.userModel.exists({ email }).exec();
+    return await this.userModel
+      .findOne({ email })
+      .select('name password token')
+      .exec();
   }
 
   async findByToken(token: string) {
-    return await this.userModel
-      .findOne({
-        token,
-        deactivate: { $ne: true },
-      })
-      .exec();
+    return await this.userModel.findOne({ token }).select('name token').exec();
   }
 
   async create(body: Partial<User>) {

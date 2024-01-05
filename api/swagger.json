@@ -98,6 +98,26 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "email and password pair is wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -165,10 +185,16 @@
             "type": "string",
             "description": "name",
             "example": "test name"
+          },
+          "token": {
+            "type": "string",
+            "description": "token",
+            "example": "auth token"
           }
         },
         "required": [
-          "name"
+          "name",
+          "token"
         ]
       },
       "Error": {

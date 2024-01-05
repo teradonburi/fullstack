@@ -37,7 +37,7 @@ export default component$(() => {
 
   const handleSubmit: QRL<SubmitHandler<SignupForm>> = $(async (values) => {
     // Runs on client      
-    await api.exampleSignupApi(values)
+    const {data} = await api.exampleSignupApi(values)
       .catch((error) => {
         if (error.response?.status === 409) {
           throw new FormError<SignupForm>('An error has occurred.', {
@@ -47,6 +47,7 @@ export default component$(() => {
           throw new FormError<SignupForm>(error.response.data.message);
         }
       })
+    localStorage.setItem('user', JSON.stringify({token: data.token}));
     location.href = '/';
   });
 
@@ -61,7 +62,7 @@ export default component$(() => {
           <Field name="name">
             {(field, props) => (
               <div>
-                <input {...props} type="email" value={field.value} />
+                name:<input {...props} type="email" value={field.value} />
                 {field.error && <div>{field.error}</div>}
               </div>
             )}
@@ -69,7 +70,7 @@ export default component$(() => {
           <Field name="email">
             {(field, props) => (
               <div>
-                <input {...props} type="email" value={field.value} />
+                email:<input {...props} type="email" value={field.value} />
                 {field.error && <div>{field.error}</div>}
               </div>
             )}
@@ -77,7 +78,7 @@ export default component$(() => {
           <Field name="password">
             {(field, props) => (
               <div>
-                <input {...props} type="password" value={field.value} />
+                password:<input {...props} type="password" value={field.value} />
                 {field.error && <div>{field.error}</div>}
               </div>
             )}

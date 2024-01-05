@@ -53,4 +53,12 @@ export class UserResponseDto {
     example: 'test name',
   })
   name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'token',
+    example: 'auth token',
+  })
+  token: string;
 }

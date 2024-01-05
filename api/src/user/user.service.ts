@@ -1,4 +1,10 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from 'src/user/user.repository';
 import { UserLoginDto, UserSignupDto } from './user.dto';
 import { getId } from 'src/lib/objectId';
@@ -25,14 +31,24 @@ export class UserService {
       token: this.userRepository.generateToken(),
     });
 
-    const newUser = await this.userRepository.update(user._id, {
+    const newUser = await this.userRepository.update(getId(user), {
       password: this.userRepository.cipher(param.password, getId(user)),
     });
 
-    return newUser;
+    return { name: newUser.name, token: user.token };
   }
 
-  login(param: UserLoginDto) {
-    console.log(param);
+  async login(param: UserLoginDto) {
+    const user = await this.userRepository.findByEmail(param.email);
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+    const password = this.userRepository.cipher(param.password, getId(user));
+    // compare hashed password
+    if (user.password !== password) {
+      throw new BadRequestException('email and password pair is wrong');
+    }
+
+    return { name: user.name, token: user.token };
   }
 }

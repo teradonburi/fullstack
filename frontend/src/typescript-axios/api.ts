@@ -98,6 +98,12 @@ export interface UserResponseDto {
      * @memberof UserResponseDto
      */
     'name': string;
+    /**
+     * token
+     * @type {string}
+     * @memberof UserResponseDto
+     */
+    'token': string;
 }
 /**
  * 

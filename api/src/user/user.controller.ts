@@ -11,6 +11,8 @@ import {
   ApiOperation,
   ApiOkResponse,
   ApiConflictResponse,
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { UserLoginDto, UserSignupDto, UserResponseDto } from './user.dto';
 import { UserService } from './user.service';
@@ -44,6 +46,14 @@ export class UserController {
     description: 'login api',
   })
   @ApiOkResponse({ description: 'Returns user', type: UserResponseDto })
+  @ApiNotFoundResponse({
+    description: 'user not found',
+    type: ErrorDTO,
+  })
+  @ApiBadRequestResponse({
+    description: 'email and password pair is wrong',
+    type: ErrorDTO,
+  })
   async login(@Body(new ValidationPipe()) body: UserLoginDto) {
     return await this.userService.login(body);
   }
