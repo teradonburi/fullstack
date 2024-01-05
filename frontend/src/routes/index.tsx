@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import InfiniteList from '~/components/infinite-list/inifinite-list';
 import { useAuth } from "~/hooks/auth";
 import { api } from "~/lib/adapter";
-import { QCounter } from "~/react/counter";
+import { ReactApp } from "~/react/ReactApp";
 
 export const usePageLoad = routeLoader$(async () => {
   const {data} = await api.exampleApi()
@@ -45,7 +45,7 @@ export default component$(() => {
           <div style={{margin: 'auto', width: 'fit-content'}}>
             {user.name}
             <a onClick$={logout} href='' style={{display: 'block'}}>Logout</a>
-            <QCounter />
+            <ReactApp />
           </div>
         :
           <div style={{margin: 'auto', width: 'fit-content'}}>
