@@ -3,9 +3,10 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bunx concurrently 'npm:dev*'",
-    "dev:api": "cd api && bun run start",
-    "dev:frontend": "cd frontend && bun run dev"
+    "dev": "bunx concurrently 'npm:dev:*'",
+    "dev:api": "cd api && bun run start:dev",
+    "dev:api-gen": "wait-on tcp:3000 && cd api && bun run gen",
+    "dev:frontend": "wait-on tcp:3000 && cd frontend && bun run dev"
   },
   "devDependencies": {
     "bun-types": "latest",

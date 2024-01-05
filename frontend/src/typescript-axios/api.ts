@@ -39,6 +39,37 @@ export interface AppResponseDto {
 /**
  * 
  * @export
+ * @interface ModelError
+ */
+export interface ModelError {
+    /**
+     * この Object の種別。ここでは必ず error が入ります。
+     * @type {string}
+     * @memberof ModelError
+     */
+    'object': string;
+    /**
+     * エラーコード文字列
+     * @type {string}
+     * @memberof ModelError
+     */
+    'code': string;
+    /**
+     * エラーメッセージ
+     * @type {string}
+     * @memberof ModelError
+     */
+    'message': string;
+    /**
+     * エラー詳細 Object の配列
+     * @type {Array<string>}
+     * @memberof ModelError
+     */
+    'details': Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface UserLoginDto
  */
 export interface UserLoginDto {
@@ -54,6 +85,19 @@ export interface UserLoginDto {
      * @memberof UserLoginDto
      */
     'password': string;
+}
+/**
+ * 
+ * @export
+ * @interface UserResponseDto
+ */
+export interface UserResponseDto {
+    /**
+     * name
+     * @type {string}
+     * @memberof UserResponseDto
+     */
+    'name': string;
 }
 /**
  * 
@@ -247,7 +291,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async exampleLoginApi(userLoginDto: UserLoginDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async exampleLoginApi(userLoginDto: UserLoginDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.exampleLoginApi(userLoginDto, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DefaultApi.exampleLoginApi']?.[index]?.url;
@@ -260,7 +304,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async exampleSignupApi(userSignupDto: UserSignupDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async exampleSignupApi(userSignupDto: UserSignupDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.exampleSignupApi(userSignupDto, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['DefaultApi.exampleSignupApi']?.[index]?.url;
@@ -303,7 +347,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        exampleLoginApi(userLoginDto: UserLoginDto, options?: any): AxiosPromise<void> {
+        exampleLoginApi(userLoginDto: UserLoginDto, options?: any): AxiosPromise<UserResponseDto> {
             return localVarFp.exampleLoginApi(userLoginDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -313,7 +357,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        exampleSignupApi(userSignupDto: UserSignupDto, options?: any): AxiosPromise<void> {
+        exampleSignupApi(userSignupDto: UserSignupDto, options?: any): AxiosPromise<UserResponseDto> {
             return localVarFp.exampleSignupApi(userSignupDto, options).then((request) => request(axios, basePath));
         },
         /**

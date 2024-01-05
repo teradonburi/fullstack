@@ -30,6 +30,10 @@ class UserRepository {
     return crypto.pbkdf2Sync(password, id, 96, 32, 'sha512').toString('hex');
   }
 
+  async findByEmail(email: string) {
+    return await this.userModel.exists({ email }).exec();
+  }
+
   async findByToken(token: string) {
     return await this.userModel
       .findOne({

@@ -44,3 +44,13 @@ export class UserLoginDto {
   })
   password: string;
 }
+
+export class UserResponseDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'name',
+    example: 'test name',
+  })
+  name: string;
+}

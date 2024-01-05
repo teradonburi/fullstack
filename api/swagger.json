@@ -49,8 +49,25 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "Returns user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -72,8 +89,15 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "Returns user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
           }
         }
       }
@@ -132,6 +156,50 @@
           "name",
           "email",
           "password"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name",
+            "example": "test name"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "description": "この Object の種別。ここでは必ず error が入ります。",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "エラーコード文字列"
+          },
+          "message": {
+            "type": "string",
+            "description": "エラーメッセージ"
+          },
+          "details": {
+            "description": "エラー詳細 Object の配列",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "object",
+          "code",
+          "message",
+          "details"
         ]
       },
       "UserLoginDto": {

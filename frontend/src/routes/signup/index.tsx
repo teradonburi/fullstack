@@ -1,9 +1,10 @@
 import { $, type QRL, component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
-import { formAction$, useForm, valiForm$ } from '@modular-forms/qwik';
+import { FormError, useForm, valiForm$ } from '@modular-forms/qwik';
 import { email, type Input, minLength, object, string } from 'valibot';
 import { api } from "~/lib/adapter";
+import type { Resolve } from "~/type";
  
 const SignupSchema = object({
   name: string([
@@ -20,6 +21,7 @@ const SignupSchema = object({
 });
  
 type SignupForm = Input<typeof SignupSchema>;
+type ResponseData = Resolve<ReturnType<typeof api.exampleSignupApi>>['data'];
  
 export const useFormLoader = routeLoader$<InitialValues<SignupForm>>(() => ({
   name: 'test',
@@ -27,20 +29,25 @@ export const useFormLoader = routeLoader$<InitialValues<SignupForm>>(() => ({
   password: '',
 }));
  
-export const useFormAction = formAction$<SignupForm>(async (values) => {
-  await api.exampleSignupApi(values)
-}, valiForm$(SignupSchema));
-
 export default component$(() => {
-  const [, { Form, Field }] = useForm<SignupForm>({
+  const [signupForm, { Form, Field }] = useForm<SignupForm, ResponseData>({
     loader: useFormLoader(),
-    action: useFormAction(),
     validate: valiForm$(SignupSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<SignupForm>> = $((values) => {
-    // Runs on client
-    console.log(values);
+  const handleSubmit: QRL<SubmitHandler<SignupForm>> = $(async (values) => {
+    // Runs on client      
+    await api.exampleSignupApi(values)
+      .catch((error) => {
+        if (error.response?.status === 409) {
+          throw new FormError<SignupForm>('An error has occurred.', {
+            email: error.response.data.message,
+          });
+        } else {
+          throw new FormError<SignupForm>(error.response.data.message);
+        }
+      })
+    location.href = '/';
   });
 
 
@@ -75,6 +82,7 @@ export default component$(() => {
               </div>
             )}
           </Field>
+          <div>{signupForm.response.message}</div>
           <button type="submit">Signup</button>
         </Form>
         </div>

@@ -7,10 +7,15 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
-import { UserLoginDto, UserSignupDto } from './user.dto';
+import {
+  ApiOperation,
+  ApiOkResponse,
+  ApiConflictResponse,
+} from '@nestjs/swagger';
+import { UserLoginDto, UserSignupDto, UserResponseDto } from './user.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ErrorDTO } from 'src/error.dto';
 
 @Controller('users')
 export class UserController {
@@ -27,6 +32,8 @@ export class UserController {
     operationId: 'example signup api',
     description: 'signup api',
   })
+  @ApiOkResponse({ description: 'Returns user', type: UserResponseDto })
+  @ApiConflictResponse({ description: 'email already exists', type: ErrorDTO })
   async signup(@Body(new ValidationPipe()) body: UserSignupDto) {
     return await this.userService.signup(body);
   }
@@ -36,6 +43,7 @@ export class UserController {
     operationId: 'example login api',
     description: 'login api',
   })
+  @ApiOkResponse({ description: 'Returns user', type: UserResponseDto })
   async login(@Body(new ValidationPipe()) body: UserLoginDto) {
     return await this.userService.login(body);
   }
