@@ -16,6 +16,6 @@ bridge api
 
 management logic as data
 
-- xstate
+- xstate with React
 - jsonlogic
 - mathjs
